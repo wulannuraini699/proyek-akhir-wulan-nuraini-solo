@@ -25,8 +25,12 @@ def main(path_data=DATA_DEFAULT, kkm=KKM_DEFAULT, path_laporan=LAPORAN_DEFAULT):
     except FileNotFoundError:
         print(f"File tidak ditemukan: {path_data}")
         return 1
-    except PermissionError:
-        print(f"Tidak ada izin membaca file: {path_data}")
+    except UnicodeDecodeError:
+        print(f"File harus berupa teks berenkode UTF-8: {path_data}")
+        return 1
+    except OSError as galat:
+        # mencakup PermissionError dan IsADirectoryError (path berupa folder)
+        print(f"File tidak dapat dibaca ({path_data}): {galat}")
         return 1
 
     for nomor, baris, alasan in ditolak:
