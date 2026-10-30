@@ -1,0 +1,23 @@
+$ python3 src/main.py
+Baris 8 ditolak (nilai di luar rentang 0-100): A007,Gita,105
+Baris 9 ditolak (nilai bukan angka): A008,Hadi,abc
+
+=== LAPORAN REKAP NILAI ===
+KKM           : 70
+Data valid    : 6
+Baris ditolak : 2
+Rata-rata     : 74.67
+Minimum       : 58.00 (Fani)
+Maksimum      : 92.00 (Citra)
+Tuntas        : 4
+Belum tuntas  : 2
+
+NIM   Nama     Nilai  Status
+A001  Ayu      85.00  Tuntas
+A002  Budi     78.00  Tuntas
+A003  Citra    92.00  Tuntas
+A004  Dani     65.00  Belum tuntas
+A005  Eka      70.00  Tuntas
+A006  Fani     58.00  Belum tuntas
+
+Laporan disimpan ke output/laporan.txt
