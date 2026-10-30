@@ -1,0 +1,9 @@
+A001,Ayu,85
+A002,Budi,78
+A003,Citra,92
+A004,Dani,65
+A005,Eka,70
+A006,Fani,58
+
+A007,Gita,105
+A008,Hadi,abc
