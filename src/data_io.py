@@ -12,11 +12,13 @@ def baca_data(path):
       data    : dictionary {nim: {"nama": ..., "nilai": ...}} untuk baris valid
       ditolak : list of (nomor_baris, isi_baris, alasan) untuk baris tidak valid
     Baris kosong dilewati. FileNotFoundError diteruskan ke pemanggil.
+    File dibaca dengan utf-8-sig agar BOM (penanda awal file dari Notepad
+    Windows) dibuang dan tidak menempel pada NIM baris pertama.
     """
     data = {}
     ditolak = []
 
-    with open(path, "r", encoding="utf-8") as file:
+    with open(path, "r", encoding="utf-8-sig") as file:
         for nomor, baris in enumerate(file, start=1):
             baris = baris.strip()
             if not baris:
