@@ -25,9 +25,16 @@ def format_laporan(data, statistik, tuntas, belum_tuntas, kkm, jumlah_ditolak):
         f"Tuntas        : {tuntas}",
         f"Belum tuntas  : {belum_tuntas}",
         "",
-        f"{'NIM':<8}{'Nama':<12}{'Nilai':>7}  Status",
     ]
+
+    # lebar kolom mengikuti data terpanjang agar tabel tetap sejajar
+    lebar_nim = max([len("NIM")] + [len(nim) for nim in data]) + 2
+    lebar_nama = max([len("Nama")] + [len(item["nama"]) for item in data.values()]) + 2
+
+    baris.append(f"{'NIM':<{lebar_nim}}{'Nama':<{lebar_nama}}{'Nilai':>7}  Status")
     for nim, item in data.items():
         status = tentukan_status(item["nilai"], kkm)
-        baris.append(f"{nim:<8}{item['nama']:<12}{item['nilai']:>7.2f}  {status}")
+        baris.append(
+            f"{nim:<{lebar_nim}}{item['nama']:<{lebar_nama}}{item['nilai']:>7.2f}  {status}"
+        )
     return "\n".join(baris) + "\n"
