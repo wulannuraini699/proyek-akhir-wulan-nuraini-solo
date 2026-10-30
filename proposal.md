@@ -202,11 +202,11 @@ Ringkasan (detail dan hasil ada di `tests/test_case.md`):
 
 | Peran | PIC | Tanggung jawab | Bukti |
 |-------|-----|----------------|-------|
-| Koordinator | ... | Menjaga ruang lingkup, integrasi, `main.py`, `utilitas.py`, review | proposal, `main.py`, `utilitas.py` |
-| Programmer Data I/O | ... | Baca/tulis file dan validasi baris | `data_io.py` |
-| Programmer Logika | ... | Statistik dan ketuntasan | `analisis.py` |
-| Tester/QA | ... | Menyusun dan menjalankan test case | `tests/test_case.md`, `tests/test_otomatis.py` |
-| Dokumentasi | ... | README dan catatan penggunaan | `README.md` |
+| Koordinator | Wulan Nur'aini | Menjaga ruang lingkup, integrasi, `main.py`, `utilitas.py`, review | proposal, `main.py`, `utilitas.py` |
+| Programmer Data I/O | Wulan Nur'aini | Baca/tulis file dan validasi baris | `data_io.py` |
+| Programmer Logika | Wulan Nur'aini | Statistik dan ketuntasan | `analisis.py` |
+| Tester/QA | Wulan Nur'aini | Menyusun dan menjalankan test case | `tests/test_case.md`, `tests/test_otomatis.py` |
+| Dokumentasi | Wulan Nur'aini | README dan catatan penggunaan | `README.md` |
 
 Catatan: seluruh anggota tetap memahami alur proyek secara keseluruhan; satu orang boleh memegang
 lebih dari satu peran, tetapi setiap tugas memiliki PIC yang jelas.
