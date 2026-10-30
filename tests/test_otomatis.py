@@ -1,5 +1,5 @@
 """
-Test otomatis proyek (menjalankan test case TC01-TC12 pada tests/test_case.md).
+Test otomatis proyek (menjalankan test case TC01-TC20 pada tests/test_case.md).
 
 Jalankan dari root proyek:
     python3 tests/test_otomatis.py
@@ -20,10 +20,15 @@ from data_io import baca_data  # noqa: E402
 from utilitas import validasi_nilai  # noqa: E402
 
 
-def tulis(folder, nama, isi):
+def tulis(folder, nama, isi, encoding="utf-8"):
+    """Menulis file uji. Jika isi berupa bytes, ditulis apa adanya."""
     path = os.path.join(folder, nama)
-    with open(path, "w", encoding="utf-8") as file:
-        file.write(isi)
+    if isinstance(isi, bytes):
+        with open(path, "wb") as file:
+            file.write(isi)
+    else:
+        with open(path, "w", encoding=encoding) as file:
+            file.write(isi)
     return path
 
 
@@ -107,6 +112,66 @@ def tc12():
         return (kode, "Rata-rata     : 70.00" in isi), (0, True)
 
 
+# ---- Pertemuan 15: kondisi kosong, encoding, folder, tampilan, argumen ----
+def tc13():
+    with tempfile.TemporaryDirectory() as t:
+        kode, teks = jalankan_main(tulis(t, "kosong.txt", ""))
+        return (kode, "Tidak ada data valid" in teks), (1, True)
+
+
+def tc14():
+    with tempfile.TemporaryDirectory() as t:
+        # Notepad (Windows) dapat menyimpan UTF-8 dengan BOM di awal file
+        sumber = tulis(t, "n.txt", "A1,Ani,80\nA2,Bo,70\n", encoding="utf-8-sig")
+        data, _ = baca_data(sumber)
+        return sorted(data), ["A1", "A2"]
+
+
+def tc15():
+    with tempfile.TemporaryDirectory() as t:
+        kode, teks = jalankan_main(t)  # path menunjuk ke folder, bukan file
+        return (kode, "tidak dapat dibaca" in teks), (1, True)
+
+
+def tc16():
+    with tempfile.TemporaryDirectory() as t:
+        sumber = tulis(t, "biner.txt", b"A1,Ani,80\n\xff\xfe\x00\n")
+        kode, teks = jalankan_main(sumber)
+        return (kode, "UTF-8" in teks), (1, True)
+
+
+def tc17():
+    with tempfile.TemporaryDirectory() as t:
+        sumber = tulis(t, "n.txt", "A1,Ayu,80\nA2,Muhammad Alfarizi Pratama,90\n")
+        laporan = os.path.join(t, "laporan.txt")
+        jalankan_main(sumber, 70, laporan)
+        baris = open(laporan, encoding="utf-8").read().splitlines()
+        baris_data = [b for b in baris if b.startswith(("A1", "A2"))]
+        posisi_titik = {b.index(".") for b in baris_data}
+        return (len(baris_data), len(posisi_titik)), (2, 1)
+
+
+def tc18():
+    keluaran = io.StringIO()
+    with contextlib.redirect_stdout(keluaran):
+        huruf = program.baca_argumen(["main.py", "x.txt", "abc"])
+        besar = program.baca_argumen(["main.py", "x.txt", "150"])
+        wajar = program.baca_argumen(["main.py", "x.txt", "75"])
+    return (huruf, besar, wajar), (None, None, ("x.txt", 75.0))
+
+
+def tc19():
+    with tempfile.TemporaryDirectory() as t:
+        data, _ = baca_data(tulis(t, "n.txt", "A1,Ani,85.5\nA2,Bo,74.5\n"))
+        return (len(data), data["A1"]["nilai"], hitung_statistik(data)["rata_rata"]), (2, 85.5, 80.0)
+
+
+def tc20():
+    with tempfile.TemporaryDirectory() as t:
+        data, ditolak = baca_data(tulis(t, "n.txt", "A1,Ani,nan\nA2,Bo,inf\n"))
+        return (len(data), len(ditolak)), (0, 2)
+
+
 TESTS = [
     ("TC01", "Normal", "Rata-rata nilai 80, 70, 90", tc01),
     ("TC02", "Batas", "Nilai 0 valid", tc02),
@@ -120,6 +185,14 @@ TESTS = [
     ("TC10", "Invalid", "Semua baris invalid", tc10),
     ("TC11", "Invalid", "NIM duplikat ditolak", tc11),
     ("TC12", "Normal", "Laporan tersimpan ke file", tc12),
+    ("TC13", "Kosong", "File kosong (0 byte)", tc13),
+    ("TC14", "Invalid", "File UTF-8 dengan BOM", tc14),
+    ("TC15", "Invalid", "Path berupa folder", tc15),
+    ("TC16", "Invalid", "File bukan teks UTF-8", tc16),
+    ("TC17", "Normal", "Tabel laporan sejajar (nama panjang)", tc17),
+    ("TC18", "Invalid", "Argumen KKM tidak valid", tc18),
+    ("TC19", "Normal", "Nilai desimal diterima", tc19),
+    ("TC20", "Invalid", "Nilai nan dan inf ditolak", tc20),
 ]
 
 
@@ -141,6 +214,7 @@ def jalankan():
     print("-" * 66)
     print(f"Total: {len(TESTS)} test | PASS: {len(TESTS) - gagal} | FAIL: {gagal}")
     return gagal
+
 
 if __name__ == "__main__":
     sys.exit(1 if jalankan() else 0)
